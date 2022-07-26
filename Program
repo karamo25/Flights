@@ -1,0 +1,112 @@
+using System;
+using System.Data.SqlClient;
+using System.Collections;
+
+namespace Destinations
+{
+    class Program
+    {
+        static string AddFlight(string fcity,string tcity,string toff,string ltime,int price)
+        {
+            string conPath = "Server=tcp:nikhils-p2.database.windows.net,1433;Initial Catalog=airlineDB;Persist Security Info=False;User ID=trainer;Password=Password@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            SqlConnection con = new SqlConnection(conPath);
+
+            SqlCommand cmd = new SqlCommand("insert into flights(fromCity,toCity,takeOff,landingtime,price)" +
+                                            "values(@fromCity,@toCity,@takeOff,@landingtime,@price)", con);
+
+
+            cmd.Parameters.AddWithValue("@fromCity",fcity);
+            cmd.Parameters.AddWithValue("@toCity", tcity);
+            cmd.Parameters.AddWithValue("@takeOff", toff);
+            cmd.Parameters.AddWithValue("@landingtime", ltime);
+            cmd.Parameters.AddWithValue("@price", price);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            return "Flight Added Successfuly";
+        }
+
+
+        static void Main(string[] args)
+        {
+            string[] cities =
+            {
+                "New York",
+                "Los Angeles",
+                "Boston",
+                "Miami",
+                "San Jose",
+                "Houston",
+                "San Antonio",
+                "Dallas",
+                "Chicago",
+                "Phoenix",
+                "Austin",
+                "Jacksonville",
+                "Fort Worth",
+                "Columbus",
+                "Charlotte",
+                "Indianapolis",
+                "San Francisco",
+                "Seattle",
+                "Denver",
+                "Washington",
+                "Nashville",
+                "Oklahoma City",
+                "Las Vegas",
+                "Kansas City"
+            };
+            string[] flightTimes =
+            {
+                "06:00 AM",
+                "08:00 AM",
+                "10:00 AM",
+                "12:00 PM",
+                "2:00  PM",
+                "4:00  PM",
+                "6:00  PM",
+                "8:00  PM",
+                "10:00 PM",
+                "12:00 AM",
+                "2: 00 AM",
+                "4: 00 AM"
+
+
+            };
+
+            int counter = 0;
+            for(int i = 0; i < cities.Length;i++)
+            {
+                for(int j = cities.Length - 1; j >= 0; j--)
+                {
+                    if(cities[i] != cities[j])
+                    {
+                        //Console.WriteLine(cities[i] + ", " + cities[j] + ", " + flightTimes[i%9] + flightTimes[j%9]);
+                        for(int k = 0; k < flightTimes.Length; k++)
+                        {
+                            for (int l = flightTimes.Length -1; l >= 0; l--)
+                            {
+                                if(flightTimes[k] != flightTimes[l])
+                                {
+                                    //AddFlight(cities[i], cities[j], flightTimes[k], flightTimes[l],200);
+
+                                    //Console.WriteLine(cities[i] + ", " + cities[j] + ", " + flightTimes[k] + " " +  flightTimes[k]);
+                                    counter++;
+                                }
+                            }
+
+                        }
+                        // AddFlight(cities[i], cities[j], "08/10/2022 10:00 AM", "08/10/2022 10:00 AM",200);
+                        
+                    }
+                      
+                }
+                 
+            }
+            Console.WriteLine();
+            Console.WriteLine(counter + " Flights!");
+        }
+    }
+}
